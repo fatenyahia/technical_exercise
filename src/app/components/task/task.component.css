@@ -1,0 +1,22 @@
+.deletebtn {
+
+
+    border-radius   : 50px;
+    background-color: #f95f53;
+    color           : white;
+    border          : none;
+    padding         : 4%;
+    height: 45px;
+    width: 45px;
+
+}
+.updatebtn{
+    margin-left: 20%;
+    border-radius: 50px;
+    background-color: #34b1aa;
+    color: white;
+    border: none;
+    padding: 4%;
+    height: 45px;
+    width: 45px;
+}

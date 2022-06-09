@@ -1,0 +1,163 @@
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal-4"
+                data-whatever="@mdo" style="margin-bottom: 3%">
+                + Add new Task
+            </button>
+            <h4 class="card-title">List of tasks</h4>
+
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="term" />
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>N</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let task of tasks | searchBytitle: term | paginate: { itemsPerPage: 5, currentPage: p}; let i=index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ task?.title }}</td>
+                            <td>{{ task?.description }}</td>
+                            <td>
+                              <label class="badge badge-danger" *ngIf="!task?.status"
+                                >Pending</label
+                              >
+                              <label class="badge badge-success" *ngIf="task?.status"
+                                >Completed</label
+                              >
+                            </td>
+                            <td>
+                              <button
+                                type="button"
+                                class="deletebtn"
+                                (click)="deleteTask(task)"
+                              >
+                              <i style='font-size:20px' class="material-icons">&#xe872;</i>
+                              
+                              </button>
+                              <button
+                                type="button"
+                                class="updatebtn"                  data-bs-toggle="modal"
+                                data-bs-target="#exampleModal-4"
+                                data-whatever="@mdo"
+                                (click)="patchValue(task)"
+                              >
+                              <i style='font-size:20px' class='fas'>&#xf304;</i>
+                              </button>
+                            </td>
+                          </tr>
+                      </tbody>
+
+          
+
+                    <!-- <tbody>
+                        <tr
+                            *ngFor="let task of tasks | searchBytitle: term | paginate: { itemsPerPage: 5, currentPage: p}; let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{task?.title}}</td>
+                            <td> {{task?.description}} </td>
+                            <td>
+                                <label class="badge badge-danger" *ngIf="!task?.status">Pending</label>
+                                <label class="badge badge-success" *ngIf="task?.status">Completed</label>
+                            </td>
+                            <td><button type="button" class="btn btn-danger btn-icon-text" (click)="deleteTask(task)">
+                                    <i class="ti-upload btn-icon-prepend"></i>
+                                    Delete
+                                </button>
+                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal-4" data-whatever="@mdo"
+                                    (click)="patchValue(task)">Open modal for @mdo</button>
+                            </td>
+                        </tr>
+
+                    </tbody> -->
+                </table>
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="exampleModal-4" tabindex="-1" aria-labelledby="ModalLabel" style="display: none;"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">New message to @mdo</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()" >
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form [formGroup]="formTask" (ngSubmit)="save()">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">title :</label>
+                        <input type="text" class="form-control" id="recipient-name" formControlName="title">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">description :</label>
+                        <textarea class="form-control" id="message-text" formControlName="description"></textarea>
+                    </div>
+                    <div class="form-group" *ngIf="update">
+
+                        <button type="button" class="btn btn-success btn-rounded btn-fw" *ngIf="status"
+                            (click)="updateStatus(false)">Completed</button>
+                        <button type="button" class="btn btn-danger btn-rounded btn-fw" *ngIf="!status"
+                            (click)="updateStatus(true)">Pending</button>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" *ngIf="!update">Save Task</button>
+                    <button type="button" class="btn btn-success" *ngIf="update" (click)="updateTask()">Update
+                        Task</button>
+
+                    <button type="reset" id="close" class="btn btn-light" data-bs-dismiss="modal" (click)="closeModal()" >Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class="modal fade" id="exampleModal-3" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ModalLabel">New message to @fat</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Recipient:</label>
+              <input type="text" class="form-control" id="recipient-name">
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Message:</label>
+              <textarea class="form-control" id="message-text"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success">Send message</button>
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
